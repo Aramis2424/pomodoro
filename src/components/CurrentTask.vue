@@ -1,5 +1,7 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, defineEmits } from 'vue'
+
+const emit = defineEmits(['send-data'])
 
 // выдаем всем todo уникальные id
 let id = 0
@@ -19,6 +21,7 @@ function addTodo() {
 
 function removeTodo(todo) {
   todos.value = todos.value.filter((t) => t !== todo)
+  emit('send-data', todo)
 }
 </script>
 
