@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onUnmounted, computed } from 'vue'
-const duration = ref(2 * 60 * 1000)
+const duration = ref(1 * 60 * 1000)
 const elapsed = ref(0)
 
 let startTime
@@ -18,6 +18,7 @@ const getTime = computed(() => {
 const update = () => {
   elapsed.value = performance.now() - startTime
   if (elapsed.value >= duration.value) {
+    isActive.value = false
     cancelAnimationFrame(handle)
   } else {
     handle = requestAnimationFrame(update)
