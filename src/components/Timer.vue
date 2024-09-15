@@ -3,13 +3,16 @@ import { ref, onUnmounted, computed } from 'vue'
 const duration = ref(2 * 60 * 1000)
 const elapsed = ref(0)
 
-let startTime = performance.now()
+let startTime
 let pauseTime = 0
 let handle
 let isActive = ref(false)
 
 const getTime = computed(() => {
-  return `${(elapsed.value / 1000 / 60).toFixed(0).padStart(2, '0')}:${(elapsed.value / 1000 % 59).toFixed(0).padStart(2, '0')}`
+  const totalSeconds = Math.floor(elapsed.value / 1000)
+  const minutes = Math.floor(totalSeconds / 60)
+  const seconds = totalSeconds % 60
+  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
 })
 
 const update = () => {
@@ -23,6 +26,8 @@ const update = () => {
 
 const reset = () => {
   elapsed.value = 0
+  pauseTime = 0
+  cancelAnimationFrame(handle)
   startTime = performance.now()
   isActive.value = true
   update()
@@ -68,8 +73,8 @@ onUnmounted(() => {
     <div class="btns">
         <button class="btn" @click="start" :disabled="isActive">Старт</button>
         <button class="btn" @click="pause" :disabled="!isActive">Пауза</button>
-        <!-- <button class="btn" @click="stop"  :disabled="!isActive">Стоп</button> -->
-        <button class="btn" @click="reset">Сброс</button>
+        <button class="btn" @click="stop"  :disabled="!isActive">Стоп</button>
+        <button class="btn" @click="reset" :disabled="isActive">Сброс</button>
     </div>
   </div>
 
@@ -84,8 +89,8 @@ onUnmounted(() => {
 }
 .btns {
     display: grid;
-    grid-template-columns: repeat(3, 100px); 
-    grid-template-rows: repeat(1, 100px);   
+    grid-template-columns: repeat(2, 100px); 
+    grid-template-rows: repeat(2, 100px);   
     gap: 10px;
     justify-content: center;
     align-items: center;
