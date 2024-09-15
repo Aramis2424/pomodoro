@@ -2,13 +2,14 @@
 import { ref, onUnmounted, computed } from 'vue'
 const duration = ref(2 * 60 * 1000)
 const elapsed = ref(0)
-const strTime = ref("")
 
-let startTime
+let startTime = performance.now()
+let pauseTime = 0
 let handle
+let isActive = ref(false)
 
 const getTime = computed(() => {
-  return `${(elapsed.value / 1000 / 60).toFixed(0)}:${(elapsed.value / 1000 % 60).toFixed(0)}`
+  return `${(elapsed.value / 1000 / 60).toFixed(0).padStart(2, '0')}:${(elapsed.value / 1000 % 59).toFixed(0).padStart(2, '0')}`
 })
 
 const update = () => {
@@ -23,22 +24,27 @@ const update = () => {
 const reset = () => {
   elapsed.value = 0
   startTime = performance.now()
+  isActive.value = true
   update()
 }
 
 const stop = () => {
   elapsed.value = 0
+  isActive.value = false
   cancelAnimationFrame(handle)
 }
 
 const pause = () => {
-  startTime = performance.now()
+  pauseTime = performance.now() - startTime
+  isActive.value = false
   cancelAnimationFrame(handle)
 }
 
 const start = () => {
-  elapsed.value = startTime
-  handle = requestAnimationFrame(update)
+  startTime = performance.now() - pauseTime
+  pauseTime = 0
+  isActive.value = true
+  update()
 }
 
 const progressRate = computed(() =>
@@ -60,9 +66,9 @@ onUnmounted(() => {
 
   <div class="btns-container">
     <div class="btns">
-        <button class="btn" @click="start">Старт</button>
-        <button class="btn" @click="pause">Пауза</button>
-        <button class="btn" @click="stop">Стоп</button>
+        <button class="btn" @click="start" :disabled="isActive">Старт</button>
+        <button class="btn" @click="pause" :disabled="!isActive">Пауза</button>
+        <!-- <button class="btn" @click="stop"  :disabled="!isActive">Стоп</button> -->
         <button class="btn" @click="reset">Сброс</button>
     </div>
   </div>
@@ -78,8 +84,8 @@ onUnmounted(() => {
 }
 .btns {
     display: grid;
-    grid-template-columns: repeat(2, 100px); 
-    grid-template-rows: repeat(2, 100px);   
+    grid-template-columns: repeat(3, 100px); 
+    grid-template-rows: repeat(1, 100px);   
     gap: 10px;
     justify-content: center;
     align-items: center;
@@ -99,7 +105,9 @@ onUnmounted(() => {
 .btn:active {
   background-color: #a8bfc2; /* Цвет темнее при нажатии */
 }
-
+.btn:disabled {
+  background-color: #848c8d;
+}
 .timerbar {
     display: flex;
     justify-content: center;
