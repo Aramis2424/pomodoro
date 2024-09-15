@@ -1,13 +1,18 @@
 <script setup>
 import { ref, onUnmounted, computed } from 'vue'
-const duration = ref(25 * 60 * 1000)
+const duration = ref(2 * 60 * 1000)
 const elapsed = ref(0)
+const strTime = ref("")
 
-let lastTime
+let startTime
 let handle
 
+const getTime = computed(() => {
+  return `${(elapsed.value / 1000 / 60).toFixed(0)}:${(elapsed.value / 1000 % 60).toFixed(0)}`
+})
+
 const update = () => {
-  elapsed.value = performance.now() - lastTime
+  elapsed.value = performance.now() - startTime
   if (elapsed.value >= duration.value) {
     cancelAnimationFrame(handle)
   } else {
@@ -17,8 +22,23 @@ const update = () => {
 
 const reset = () => {
   elapsed.value = 0
-  lastTime = performance.now()
+  startTime = performance.now()
   update()
+}
+
+const stop = () => {
+  elapsed.value = 0
+  cancelAnimationFrame(handle)
+}
+
+const pause = () => {
+  startTime = performance.now()
+  cancelAnimationFrame(handle)
+}
+
+const start = () => {
+  elapsed.value = startTime
+  handle = requestAnimationFrame(update)
 }
 
 const progressRate = computed(() =>
@@ -33,17 +53,17 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="timer">{{ (elapsed / 1000).toFixed(0) }}</div>
+  <div class="timer">{{ getTime }}</div>
   <div class="timerbar">
     <progress :value="progressRate"></progress>
   </div>
 
   <div class="btns-container">
     <div class="btns">
-        <button class="btn">Старт</button>
-        <button class="btn">Пауза</button>
-        <button class="btn">Стоп</button>
-        <button class="btn"  @click="reset">Сброс</button>
+        <button class="btn" @click="start">Старт</button>
+        <button class="btn" @click="pause">Пауза</button>
+        <button class="btn" @click="stop">Стоп</button>
+        <button class="btn" @click="reset">Сброс</button>
     </div>
   </div>
 
