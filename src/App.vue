@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import CurrentTask from './components/CurrentTask.vue'
 import DoneTask from './components/DoneTask.vue'
+import Timer from './components/Timer.vue'
 
 const doneTodo = ref({})
 const updateDoneTasks = ((data) => {
@@ -15,6 +16,9 @@ const updateDoneTasks = ((data) => {
   </div>
   <div class="doneTasks">
     <DoneTask :todo="doneTodo" />
+  </div>
+  <div class="timer">
+    <Timer />
   </div>
 </template>
 
@@ -35,5 +39,12 @@ const updateDoneTasks = ((data) => {
   width: 20%; 
   height: 100vh;
   border-left: 1px solid #000; 
+}
+
+.timer {
+  position: absolute; 
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%, -50%);
 }
 </style>
