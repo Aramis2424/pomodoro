@@ -25,7 +25,7 @@ const updateDoneTasks = ((data) => {
   left: 0; 
   width: 20%; 
   height: 100vh;
-  border: 1px solid #000; 
+  border-right: 1px solid #000; 
 }
 
 .doneTasks {
@@ -34,6 +34,6 @@ const updateDoneTasks = ((data) => {
   right: 0; 
   width: 20%; 
   height: 100vh;
-  border: 1px solid #000; 
+  border-left: 1px solid #000; 
 }
 </style>
