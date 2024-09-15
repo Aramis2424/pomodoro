@@ -1,8 +1,14 @@
 <script setup>
-import { defineProps } from 'vue'
+import { ref, watch } from 'vue'
 
 const props = defineProps({
-  todos: Array
+  todo: JSON
+})
+
+const todos = ref([])
+
+watch(() => props.todo, (doneTodo) => {
+  todos.value.push(doneTodo)
 })
 
 </script>

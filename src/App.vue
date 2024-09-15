@@ -3,10 +3,9 @@ import { ref } from 'vue'
 import CurrentTask from './components/CurrentTask.vue'
 import DoneTask from './components/DoneTask.vue'
 
-const doneTodos = ref([])
-
+const doneTodo = ref({})
 const updateDoneTasks = ((data) => {
-  doneTodos.value.push(data)
+  doneTodo.value = data
 })
 </script>
 
@@ -14,9 +13,8 @@ const updateDoneTasks = ((data) => {
   <div class="currentTasks">
     <CurrentTask @send-data="updateDoneTasks" />
   </div>
-  
   <div class="doneTasks">
-    <DoneTask :todos="doneTodos" />
+    <DoneTask :todo="doneTodo" />
   </div>
 </template>
 
