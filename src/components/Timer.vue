@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onUnmounted, computed } from 'vue'
-const duration = ref(1 * 60 * 1000)
+const duration = ref(1 * 2 * 1000)
 const elapsed = ref(0)
 
 let startTime
@@ -9,7 +9,7 @@ let handle
 let isActive = ref(false)
 
 const getTime = computed(() => {
-  const totalSeconds = Math.floor(elapsed.value / 1000)
+  const totalSeconds = duration.value / 1000 - Math.floor(elapsed.value / 1000)
   const minutes = Math.floor(totalSeconds / 60)
   const seconds = totalSeconds % 60
   return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
@@ -18,6 +18,7 @@ const getTime = computed(() => {
 const update = () => {
   elapsed.value = performance.now() - startTime
   if (elapsed.value >= duration.value) {
+    changeColor()
     isActive.value = false
     cancelAnimationFrame(handle)
   } else {
@@ -57,11 +58,21 @@ const progressRate = computed(() =>
   Math.min(elapsed.value / duration.value, 1)
 )
 
-reset()
+//reset()
 
 onUnmounted(() => {
   cancelAnimationFrame(handle)
 })
+
+const changeColor = () => {
+  let rose = 'var(--vt-c-darkrose)'
+  let teal = 'var(--vt-c-teal)'
+  let curColor = document.body.style.backgroundColor
+  let newColor = curColor === rose ? teal : rose
+  document.body.style.backgroundColor = newColor
+}
+
+changeColor()
 </script>
 
 <template>
@@ -76,6 +87,7 @@ onUnmounted(() => {
         <button class="btn" @click="pause" :disabled="!isActive">Пауза</button>
         <button class="btn" @click="stop"  :disabled="!isActive">Стоп</button>
         <button class="btn" @click="reset" :disabled="isActive">Сброс</button>
+        <!-- <button class="btn">Смена режима</button> -->
     </div>
   </div>
 
