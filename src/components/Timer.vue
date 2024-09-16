@@ -1,17 +1,35 @@
 <script setup>
 import { ref, onUnmounted, computed } from 'vue'
-const duration = ref(4 * 1000)
+
+const getWorkTime = () => {
+  return 1 * 3 * 1000
+}
+
+const getRelaxTime = () => {
+  return 1 * 2 * 1000
+}
+
+const duration = ref(getWorkTime())
 const elapsed = ref(0)
 
 let startTime
-let pauseTime = 0
-let handle
+let pauseTime
 
 let isActive = ref(false)
 let isModeWork = ref(true)
 
+let handle // timer animation
+
+const initSystem = () => {
+  startTime = performance.now()
+  pauseTime = 0
+  isActive.value = false
+  isModeWork.value = true
+  duration.value = getWorkTime()
+}
+
 const getTime = computed(() => {
-  const totalSeconds = duration.value / 1000 - Math.floor(elapsed.value / 1000)
+  const totalSeconds = duration.value / 1000 - Math.floor(elapsed.value / 1000) // обратный счет
   const minutes = Math.floor(totalSeconds / 60)
   const seconds = totalSeconds % 60
   return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
@@ -77,14 +95,16 @@ const changeColor = () => {
 const changeMode = () => {
   if (isModeWork.value === true) {
     isModeWork.value = false
-    duration.value = 7 * 1000
+    duration.value = getRelaxTime()
   } else {
     isModeWork.value = true
-    duration.value = 4 * 1000
+    duration.value = getWorkTime()
   }
   changeColor()
   start()
 }
+
+initSystem()
 </script>
 
 <template>
