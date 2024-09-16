@@ -1,12 +1,13 @@
 <script setup>
-import { ref, onUnmounted, computed } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
+//import { requestNotificationPermission, showNotification } from './alarm'
 
 const getWorkTime = () => {
-  return 25 * 60 * 1000
+  return 2 * 1000
 }
 
 const getRelaxTime = () => {
-  return 5 * 60 * 1000
+  return 3 * 1000
 }
 
 const duration = ref(getWorkTime())
@@ -19,6 +20,36 @@ let isActive = ref(false)
 let isModeWork = ref(true)
 
 let handle // timer animation
+
+const timerID = ref(null) // need for running timer out tab
+const handleVisibilityChange = () => {
+  if (document.visibilityState === 'visible') {
+    clearInterval(timerID.value)
+    timerID.value = null
+  } else {
+    timerID.value = setInterval(() => {
+      if (!isActive.value) {
+        return
+      }
+      elapsed.value += 1000
+      document.title = `Pomodoro ${getTime.value}`;
+      if (elapsed.value >= duration.value) {
+        isActive.value = false
+        cancelAnimationFrame(handle)
+        //showNotification()
+        changeMode()
+        start()
+      }
+    }, 1000)
+  }
+};
+onMounted(() => {
+  document.addEventListener('visibilitychange', handleVisibilityChange);
+  handleVisibilityChange();
+});
+onUnmounted(() => {
+  document.removeEventListener('visibilitychange', handleVisibilityChange);
+});
 
 const initSystem = () => {
   startTime = performance.now()
@@ -37,9 +68,11 @@ const getTime = computed(() => {
 
 const update = () => {
   elapsed.value = performance.now() - startTime
+  document.title = `Pomodoro ${getTime.value}`;
   if (elapsed.value >= duration.value) {
     isActive.value = false
     cancelAnimationFrame(handle)
+    //showNotification()
     changeMode()
     start()
   } else {
@@ -106,6 +139,7 @@ const changeMode = () => {
 }
 
 initSystem()
+//requestNotificationPermission()
 </script>
 
 <template>
