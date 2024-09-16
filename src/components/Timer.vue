@@ -120,6 +120,11 @@ initSystem()
         <button class="btn" @click="pause" :disabled="!isActive">Пауза</button>
         <button class="btn" @click="stop"  :disabled="!isActive">Стоп</button>
         <button class="btn" @click="reset" :disabled="isActive">Сброс</button>
+    </div>
+  </div>
+
+  <div class="btns-container">
+    <div class="btnMode">
         <button class="btn" @click="changeMode">Смена режима</button>
     </div>
   </div>
@@ -136,10 +141,19 @@ initSystem()
 .btns {
     display: grid;
     grid-template-columns: repeat(2, 100px); 
-    grid-template-rows: repeat(2, 100px);   
+    grid-template-rows: repeat(2, 80px);   
     gap: 10px;
     justify-content: center;
     align-items: center;
+}
+.btnMode {
+    display: grid;
+    grid-template-columns: repeat(1, 200px); 
+    grid-template-rows: repeat(1, 90px);   
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
 }
 .btn {
     display: flex;
