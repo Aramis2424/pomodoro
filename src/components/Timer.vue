@@ -93,6 +93,7 @@ const changeColor = () => {
 }
 
 const changeMode = () => {
+  stop()
   if (isModeWork.value === true) {
     isModeWork.value = false
     duration.value = getRelaxTime()
@@ -119,7 +120,7 @@ initSystem()
         <button class="btn" @click="pause" :disabled="!isActive">Пауза</button>
         <button class="btn" @click="stop"  :disabled="!isActive">Стоп</button>
         <button class="btn" @click="reset" :disabled="isActive">Сброс</button>
-        <!-- <button class="btn">Смена режима</button> -->
+        <button class="btn" @click="changeMode">Смена режима</button>
     </div>
   </div>
 
