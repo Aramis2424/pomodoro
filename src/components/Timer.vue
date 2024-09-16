@@ -1,12 +1,14 @@
 <script setup>
 import { ref, onUnmounted, computed } from 'vue'
-const duration = ref(1 * 2 * 1000)
+const duration = ref(4 * 1000)
 const elapsed = ref(0)
 
 let startTime
 let pauseTime = 0
 let handle
+
 let isActive = ref(false)
+let isModeWork = ref(true)
 
 const getTime = computed(() => {
   const totalSeconds = duration.value / 1000 - Math.floor(elapsed.value / 1000)
@@ -18,9 +20,9 @@ const getTime = computed(() => {
 const update = () => {
   elapsed.value = performance.now() - startTime
   if (elapsed.value >= duration.value) {
-    changeColor()
     isActive.value = false
     cancelAnimationFrame(handle)
+    changeMode()
   } else {
     handle = requestAnimationFrame(update)
   }
@@ -58,8 +60,6 @@ const progressRate = computed(() =>
   Math.min(elapsed.value / duration.value, 1)
 )
 
-//reset()
-
 onUnmounted(() => {
   cancelAnimationFrame(handle)
 })
@@ -67,12 +67,24 @@ onUnmounted(() => {
 const changeColor = () => {
   let rose = 'var(--vt-c-darkrose)'
   let teal = 'var(--vt-c-teal)'
-  let curColor = document.body.style.backgroundColor
-  let newColor = curColor === rose ? teal : rose
-  document.body.style.backgroundColor = newColor
+  if (isModeWork.value === true) {
+    document.body.style.backgroundColor = rose
+  } else {
+    document.body.style.backgroundColor = teal
+  }
 }
 
-changeColor()
+const changeMode = () => {
+  if (isModeWork.value === true) {
+    isModeWork.value = false
+    duration.value = 7 * 1000
+  } else {
+    isModeWork.value = true
+    duration.value = 4 * 1000
+  }
+  changeColor()
+  start()
+}
 </script>
 
 <template>
