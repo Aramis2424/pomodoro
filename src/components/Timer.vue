@@ -2,11 +2,11 @@
 import { ref, onUnmounted, computed } from 'vue'
 
 const getWorkTime = () => {
-  return 1 * 3 * 1000
+  return 25 * 60 * 1000
 }
 
 const getRelaxTime = () => {
-  return 1 * 2 * 1000
+  return 5 * 60 * 1000
 }
 
 const duration = ref(getWorkTime())
