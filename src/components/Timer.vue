@@ -41,6 +41,7 @@ const update = () => {
     isActive.value = false
     cancelAnimationFrame(handle)
     changeMode()
+    start()
   } else {
     handle = requestAnimationFrame(update)
   }
@@ -102,7 +103,6 @@ const changeMode = () => {
     duration.value = getWorkTime()
   }
   changeColor()
-  start()
 }
 
 initSystem()
