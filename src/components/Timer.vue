@@ -1,13 +1,13 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
-//import { requestNotificationPermission, showNotification } from './alarm'
+import { requestNotificationPermission, showNotification } from './notification'
 
 const getWorkTime = () => {
-  return 2 * 1000
+  return 25 * 60 * 1000
 }
 
 const getRelaxTime = () => {
-  return 3 * 1000
+  return 5 * 60 * 1000
 }
 
 const duration = ref(getWorkTime())
@@ -20,6 +20,7 @@ let isActive = ref(false)
 let isModeWork = ref(true)
 
 let handle // timer animation
+const audio = new Audio('./src/assets/bell.mp3');
 
 const timerID = ref(null) // need for running timer out tab
 const handleVisibilityChange = () => {
@@ -28,17 +29,12 @@ const handleVisibilityChange = () => {
     timerID.value = null
   } else {
     timerID.value = setInterval(() => {
-      if (!isActive.value) {
+      if (!isActive.value)
         return
-      }
       elapsed.value += 1000
       document.title = `Pomodoro ${getTime.value}`;
       if (elapsed.value >= duration.value) {
-        isActive.value = false
-        cancelAnimationFrame(handle)
-        //showNotification()
-        changeMode()
-        start()
+        whenTimeout()
       }
     }, 1000)
   }
@@ -70,14 +66,19 @@ const update = () => {
   elapsed.value = performance.now() - startTime
   document.title = `Pomodoro ${getTime.value}`;
   if (elapsed.value >= duration.value) {
-    isActive.value = false
-    cancelAnimationFrame(handle)
-    //showNotification()
-    changeMode()
-    start()
+    whenTimeout()
   } else {
     handle = requestAnimationFrame(update)
   }
+}
+
+const whenTimeout = () => {
+  isActive.value = false
+  cancelAnimationFrame(handle)
+  audio.play();
+  showNotification()
+  changeMode()
+  start()
 }
 
 const reset = () => {
