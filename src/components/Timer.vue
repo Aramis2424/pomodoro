@@ -7,7 +7,7 @@ const getWorkTime = () => {
 }
 
 const getRelaxTime = () => {
-  return 5 * 60 * 1000
+  return 5 * 6 * 1000
 }
 
 const duration = ref(getWorkTime())
@@ -140,7 +140,7 @@ const changeMode = () => {
 }
 
 initSystem()
-//requestNotificationPermission()
+requestNotificationPermission()
 </script>
 
 <template>
