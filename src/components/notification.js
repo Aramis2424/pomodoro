@@ -2,9 +2,9 @@ export const requestNotificationPermission = () => {
     if ("Notification" in window) {
         Notification.requestPermission().then((permission) => {
             if (permission !== "default") {
-                alert("Уведомления можно включить.")
+                alert("Включите уведомления")
             } else if (permission !== "granted") {
-              alert("Уведомления отключены пользователем.")
+              alert("Уведомления отключены – работа сервера невозможна")
           }
         })
     }
