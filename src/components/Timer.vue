@@ -25,20 +25,13 @@ let handle // timer animation
 const audio = new Audio('./bell.mp3');
 
 const timerID = ref(null) // need for running timer out tab
+const worker = new Worker('./src/components/timerWorker.js');
 const handleVisibilityChange = () => {
   if (document.visibilityState === 'visible') {
-    clearInterval(timerID.value)
-    timerID.value = null
+    worker.postMessage({ type: 'stop' });
   } else {
-    timerID.value = setInterval(() => {
-      if (!isActive.value)
-        return
-      elapsed.value += 1000
-      document.title = `Pomodoro ${getTime.value}`;
-      if (elapsed.value >= duration.value) {
-        whenTimeout()
-      }
-    }, 1000)
+      if (isActive.value)
+        worker.postMessage({ type: 'start', cnt: elapsed.value });
   }
 };
 onMounted(() => {
@@ -48,6 +41,17 @@ onMounted(() => {
 onUnmounted(() => {
   document.removeEventListener('visibilitychange', handleVisibilityChange);
 });
+
+worker.onmessage = function(event) {
+  const { type, counter } = event.data;
+  if (type === 'tick') {
+    elapsed.value = counter;
+    document.title = `Pomodoro ${getTime.value}`;
+    if (elapsed.value >= duration.value) {
+        whenTimeout()
+      }
+  }
+};
 
 const initSystem = () => {
   startTime = performance.now()
