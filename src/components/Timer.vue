@@ -24,8 +24,7 @@ let isModeWork = ref(true)
 let handle // timer animation
 const audio = new Audio('./bell.mp3');
 
-const timerID = ref(null) // need for running timer out tab
-const worker = new Worker('./src/components/timerWorker.js');
+const worker = new Worker('./timerWorker.js');
 const handleVisibilityChange = () => {
   if (document.visibilityState === 'visible') {
     worker.postMessage({ type: 'stop' });
