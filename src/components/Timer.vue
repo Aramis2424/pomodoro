@@ -20,7 +20,7 @@ let isActive = ref(false)
 let isModeWork = ref(true)
 
 let handle // timer animation
-const audio = new Audio('./src/assets/bell.mp3');
+const audio = new Audio('./bell.mp3');
 
 const timerID = ref(null) // need for running timer out tab
 const handleVisibilityChange = () => {
@@ -212,7 +212,7 @@ requestNotificationPermission()
     display: flex;
     justify-content: center;
     align-items: center; 
-    font-size: 40pt;
+    font-size: 250%;
 }
 .timer {
     font-size: 100pt;
