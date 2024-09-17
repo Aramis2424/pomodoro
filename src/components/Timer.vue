@@ -2,12 +2,14 @@
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { requestNotificationPermission, showNotification } from './notification'
 
+const emit = defineEmits(['increment'])
+
 const getWorkTime = () => {
   return 25 * 60 * 1000
 }
 
 const getRelaxTime = () => {
-  return 5 * 6 * 1000
+  return 5 * 60 * 1000
 }
 
 const duration = ref(getWorkTime())
@@ -73,6 +75,8 @@ const update = () => {
 }
 
 const whenTimeout = () => {
+  if (isModeWork.value)
+    emit("increment")
   isActive.value = false
   cancelAnimationFrame(handle)
   audio.play();

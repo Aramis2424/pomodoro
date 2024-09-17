@@ -8,6 +8,11 @@ const doneTodo = ref({})
 const updateDoneTasks = ((data) => {
   doneTodo.value = data
 })
+
+const cntTomatos = ref(0)
+const incTomatos = () => {
+  cntTomatos.value++
+}
 </script>
 
 <template>
@@ -18,7 +23,10 @@ const updateDoneTasks = ((data) => {
     <DoneTask :todo="doneTodo" />
   </div>
   <div class="timer">
-    <Timer />
+    <Timer @increment="incTomatos" />
+  </div>
+  <div class="counter">
+    Всего помидоров: {{ cntTomatos }}
   </div>
 </template>
 
@@ -46,5 +54,11 @@ const updateDoneTasks = ((data) => {
   top: 50%; 
   left: 50%; 
   transform: translate(-50%, -50%);
+}
+
+.counter {
+  position: absolute;
+  bottom: 3%;
+  left: 90%;
 }
 </style>
