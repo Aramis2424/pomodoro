@@ -47,8 +47,9 @@ worker.onmessage = function(event) {
     elapsed.value = counter;
     document.title = `Pomodoro ${getTime.value}`;
     if (elapsed.value >= duration.value) {
+        worker.postMessage({ type: 'reset' });
         whenTimeout()
-      }
+    }
   }
 };
 

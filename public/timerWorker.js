@@ -12,5 +12,7 @@ self.onmessage = function(event) {
     }, 1000);
   } else if (type === 'stop') {
     clearInterval(intervalId);
+  } else if (type === 'reset') {
+    timeCnt = 0
   }
 };
