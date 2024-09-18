@@ -59,6 +59,6 @@ const incTomatos = () => {
 .counter {
   position: absolute;
   bottom: 3%;
-  left: 90%;
+  left: 85%;
 }
 </style>
